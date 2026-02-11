@@ -1,0 +1,12 @@
+{
+  "name": "verify-api",
+  "description": "Smoke test both services by running sample API requests and verifying responses",
+  "version": "1.0.0",
+  "prompts": [
+    {
+      "name": "main",
+      "description": "Verify both services are running and responding correctly",
+      "content": "Execute the following verification tasks:\n\n1. Check if services are running:\n   - Verify Mutant Service on port 8080\n   - Verify Stats Service on port 8081\n   - If either is not running, inform the user to start them\n\n2. Test Mutant Service (POST /mutant/):\n   - Send mutant DNA (should return 200):\n     ```json\n     {\"dna\":[\"ATGCGA\",\"CAGTGC\",\"TTATGT\",\"AGAAGG\",\"CCCCTA\",\"TCACTG\"]}\n     ```\n   - Send human DNA (should return 403):\n     ```json\n     {\"dna\":[\"ATGCGA\",\"CAGTGC\",\"TTATTT\",\"AGACGG\",\"GCGTCA\",\"TCACTG\"]}\n     ```\n   - Send invalid DNA (should return 400):\n     ```json\n     {\"dna\":[\"ATGCGA\",\"CAGTGC\",\"TTATTT\"]}\n     ```\n\n3. Test Stats Service (GET /stats/):\n   - Retrieve statistics\n   - Verify response contains: count_mutant_dna, count_human_dna, ratio\n   - Verify ratio calculation is correct (count_mutant_dna / count_human_dna)\n\n4. Report results:\n   ```\n   Endpoint                    | Expected | Actual | Status\n   ----------------------------|----------|--------|--------\n   POST /mutant/ (mutant)      | 200      | XXX    | ✓/✗\n   POST /mutant/ (human)       | 403      | XXX    | ✓/✗\n   POST /mutant/ (invalid)     | 400      | XXX    | ✓/✗\n   GET /stats/                 | 200      | XXX    | ✓/✗\n   GET /stats/ (valid format)  | ✓        | ✓/✗    | ✓/✗\n   ```\n\nIf any test fails, provide details about the unexpected response."
+    }
+  ]
+}

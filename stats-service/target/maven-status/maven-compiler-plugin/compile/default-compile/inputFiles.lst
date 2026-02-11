@@ -1,0 +1,7 @@
+/Users/danielarenhart/repos/mutant/stats-service/src/main/java/com/example/stats_service/StatsServiceApplication.java
+/Users/danielarenhart/repos/mutant/stats-service/src/main/java/com/example/stats_service/config/RedisConfig.java
+/Users/danielarenhart/repos/mutant/stats-service/src/main/java/com/example/stats_service/controller/StatsController.java
+/Users/danielarenhart/repos/mutant/stats-service/src/main/java/com/example/stats_service/dto/StatsResponse.java
+/Users/danielarenhart/repos/mutant/stats-service/src/main/java/com/example/stats_service/entity/DnaStats.java
+/Users/danielarenhart/repos/mutant/stats-service/src/main/java/com/example/stats_service/repository/DnaStatsRepository.java
+/Users/danielarenhart/repos/mutant/stats-service/src/main/java/com/example/stats_service/service/StatsService.java

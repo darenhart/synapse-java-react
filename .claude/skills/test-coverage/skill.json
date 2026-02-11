@@ -1,0 +1,12 @@
+{
+  "name": "test-coverage",
+  "description": "Run tests for both services and verify code coverage meets 80% threshold",
+  "version": "1.0.0",
+  "prompts": [
+    {
+      "name": "main",
+      "description": "Run tests and check coverage for both microservices",
+      "content": "Execute the following tasks:\n\n1. Run tests for the Mutant Service (dna-demo):\n   - Change to dna-demo directory\n   - Run: ./mvnw test\n   - Check if tests pass\n   - Extract code coverage percentage from JaCoCo report\n\n2. Run tests for the Stats Service (stats-service):\n   - Change to stats-service directory\n   - Run: ./mvnw test\n   - Check if tests pass\n   - Extract code coverage percentage from JaCoCo report\n\n3. Verify coverage meets requirements:\n   - Both services must have ≥80% code coverage\n   - Report results in a clear summary table\n   - Flag any services below threshold\n\n4. Summary format:\n   ```\n   Service          | Tests | Status | Coverage | Meets 80%?\n   ----------------|-------|--------|----------|------------\n   Mutant Service  | X/Y   | ✓/✗    | XX.X%    | ✓/✗\n   Stats Service   | X/Y   | ✓/✗    | XX.X%    | ✓/✗\n   ```\n\nIf any service fails tests or is below 80% coverage, provide specific details about what failed."
+    }
+  ]
+}
