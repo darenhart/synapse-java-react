@@ -51,11 +51,11 @@ public class DnaService {
 
         // Atomically increment stats counter
         if (isMutant) {
-            dnaStatsRepository.incrementMutantCount();
-            log.debug("Incremented mutant count");
+            int updatedRows = dnaStatsRepository.incrementMutantCount();
+            log.info("Incremented mutant count - rows affected: {}", updatedRows);
         } else {
-            dnaStatsRepository.incrementHumanCount();
-            log.debug("Incremented human count");
+            int updatedRows = dnaStatsRepository.incrementHumanCount();
+            log.info("Incremented human count - rows affected: {}", updatedRows);
         }
 
         return isMutant;
