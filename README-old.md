@@ -214,3 +214,13 @@ Built using **TDD** (Test-Driven Development):
 ## License
 
 This project is for demonstration purposes.
+
+## Trade offs
+Redis for caching and stats storage: Trade-off between speed and complexity. Fast reads/writes but adds infrastructure cost.
+H2 vs PostgresSQL: Trade-off between simplicity and features. H2 is easy to set up, PostgresSQL is more robust.
+
+Service communication:
+Shared database vs Message queue events vs Stats-service calls Mutant-service API
+
+## Open Questions
+Would only “/stats/” receive high traffic, or both endpoints?

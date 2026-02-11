@@ -1,7 +1,7 @@
 package com.example.dna_demo.controller;
 
 import com.example.dna_demo.dto.DnaRequest;
-import com.example.dna_demo.service.MutantDetector;
+import com.example.dna_demo.service.DnaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MutantController {
 
-    private final MutantDetector mutantDetector;
+    private final DnaService dnaService;
 
     @PostMapping("/")
     public ResponseEntity<Void> checkMutant(@Valid @RequestBody DnaRequest request) {
-        boolean isMutant = mutantDetector.isMutant(request.dna());
+        boolean isMutant = dnaService.verifyAndSave(request.dna());
 
         if (isMutant) {
             return ResponseEntity.ok().build();
