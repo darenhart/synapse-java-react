@@ -101,13 +101,19 @@ npm test
 
 ---
 
-## Trade-offs
+## Trade-offs & Decisions
 
 - **Database**: Current is H2 for simplicity. Considered PostgreSQL for production.
 - **Service Communication**: Shared DB for simplicity vs REST API or message queue for decoupling.
 - **Caching**: Redis for performance vs added complexity.
 
 ---
+
+## ToDos
+
+- [ ] Rename `dna-demo` to `mutant-service` for clarity
+- [ ] Implement stats display in frontend
+- [ ] Improve .claude skills for better test automation
 
 ## Open Questions
 
