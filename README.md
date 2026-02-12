@@ -1,151 +1,114 @@
-# DNA Mutant Detector - Microservices Architecture
+# DNA Mutant Detector
 
-A scalable microservices-based system for detecting mutant DNA sequences and tracking verification statistics. Built to handle high traffic loads (100 to 1M requests/second).
+A scalable microservices system for detecting mutant DNA sequences and tracking verification statistics. Built to handle high-scale traffic with Redis caching and optimized algorithms.
 
-## 📐 Architecture Overview
-
-```
-                        ┌──────────────┐
-                        │   Frontend   │
-                        │  (Port 5173) │
-                        └──────┬───────┘
-                               │
-          ┌────────────────────┼────────────────────┐
-          │                    │                    │
-   ┌──────▼──────┐      ┌──────▼──────┐     ┌──────▼──────┐
-   │   Mutant    │◄────►│  Database   │◄───►│    Stats    │
-   │   Service   │      │     (H2)    │     │   Service   │
-   │ (Port 8080) │      └─────────────┘     │ (Port 8081) │
-   └──────┬──────┘                          └──────┬──────┘
-          │                                         │
-          └─────────────────┬───────────────────────┘
-                            │
-                     ┌──────▼──────┐
-                     │    Redis    │
-                     │   (Cache)   │
-                     └─────────────┘
-```
-
-### Services
-
-1. **Mutant Service** (`dna-demo/`) - Verifies DNA sequences and persists results
-2. **Stats Service** (`stats-service/`) - Provides real-time statistics
-3. **Frontend** (`dna-frontend/`) - React web interface for testing
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-
-- **Java 17** or higher
-- **Maven 3.6+** (or use included Maven wrapper)
-- **Node.js 18+** (for frontend)
-- **Redis** (optional for caching, recommended for production)
+- **Java 17+** and **Maven 3.6+**
+- **Node.js 18+**
+- **Redis** (optional but recommended)
 
 ### Start Redis (Recommended)
 ```bash
-# Using Docker
 docker run -d -p 6379:6379 redis:latest
-
-# Or using Homebrew on Mac
-brew services start redis
 ```
 
-### Option 1: Start All Services (Recommended)
+### Install Dependencies (First Time)
 ```bash
-# Install dependencies (first time only)
 npm install
 cd dna-frontend && npm install && cd ..
+```
 
-# Start all services in one terminal
+### Start All Services
+```bash
 npm start
 ```
 
-This starts:
-- **Mutant Service** (Port 8080) - Green logs
-- **Stats Service** (Port 8081) - Blue logs
-- **Frontend** (Port 5173) - Magenta logs
-
-Press `Ctrl+C` to stop all services.
-
-### Option 2: Start Services Individually
-```bash
-# Terminal 1: Mutant Service (Port 8080)
-cd dna-demo
-./mvnw spring-boot:run
-
-# Terminal 2: Stats Service (Port 8081)
-cd stats-service
-./mvnw spring-boot:run
-
-# Terminal 3: Frontend (Port 5173)
-cd dna-frontend
-npm run dev
-```
-
-## 🌐 Web Interface
-
-Open [http://localhost:5173](http://localhost:5173) in your browser to use the web interface:
-
-- Input DNA sequences (6x6 grid)
-- Generate random DNA for testing
-- View mutant detection results
-- See real-time statistics
-
-## 📡 API Examples
-
-### Verify Mutant DNA (200 OK)
-```bash
-curl -X POST http://localhost:8080/mutant/ \
-  -H "Content-Type: application/json" \
-  -d '{"dna":["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"]}' \
-  -w "%{http_code}\n"
-# Output: 200
-```
-
-### Verify Human DNA (403 Forbidden)
-```bash
-curl -X POST http://localhost:8080/mutant/ \
-  -H "Content-Type: application/json" \
-  -d '{"dna":["ATGCGA","CAGTGC","TTATTT","AGACGG","GCGTCA","TCACTG"]}' \
-  -w "%{http_code}\n"
-# Output: 403
-```
-
-### Get Statistics
-```bash
-curl http://localhost:8081/stats/
-# Output: {"count_mutant_dna":1,"count_human_dna":1,"ratio":0.5}
-```
-
-## 🧪 Run Tests
-
-```bash
-# Mutant Service (39 tests)
-cd dna-demo
-./mvnw test
-
-# Stats Service
-cd stats-service
-./mvnw test
-```
-
-## 📚 Full Documentation
-
-See individual service README files:
-- [Mutant Service Documentation](dna-demo/README.md)
-- [Stats Service Documentation](stats-service/)
-- [Frontend Documentation](dna-frontend/README.md)
+This starts all three services with color-coded logs:
+- **Mutant Service** (Port 8080) - Green
+- **Stats Service** (Port 8081) - Blue
+- **Frontend** (Port 5173) - Magenta
 
 ---
 
-**Built with TDD | Ready for High-Scale Production** 🧬
+## 🌐 Web Interface
 
-## Trade offs
-Redis for caching and stats storage: Trade-off between speed and complexity. Fast reads/writes but adds infrastructure cost.
-H2 vs PostgresSQL: Trade-off between simplicity and features. H2 is easy to set up, PostgresSQL is more robust.
+Open **[http://localhost:5173](http://localhost:5173)** to:
 
-Service communication:
-Shared database vs Message queue events vs Stats-service calls Mutant-service API
+---
+
+## 🏗️ Architecture
+
+```mermaid
+graph TB
+    Frontend[Frontend<br/>React + Vite<br/>:5173]
+
+    Mutant[Mutant Service<br/>Spring Boot<br/>:8080]
+    Stats[Stats Service<br/>Spring Boot<br/>:8081]
+
+    DB[(H2 Database<br/>Shared)]
+    Redis[(Redis Cache<br/>:6379)]
+
+    Frontend -->|POST /mutant/| Mutant
+    Frontend -->|NOT IMPLEMENTED| Stats
+
+    Mutant -->|Read/Write| DB
+    Stats -->|Read| DB
+
+    Mutant -->|Cache Results| Redis
+    Stats -->|Cache Stats| Redis
+
+    style Frontend fill:#e1f5ff
+    style Mutant fill:#c8e6c9
+    style Stats fill:#bbdefb
+    style DB fill:#fff9c4
+    style Redis fill:#ffccbc
+```
+
+**Quick Overview:**
+- **Frontend** (React + Vite) → User interface
+- **Mutant Service** (Spring Boot) → DNA verification + persistence
+- **Stats Service** (Spring Boot) → Statistics aggregation
+- **H2 Database** → Shared data storage
+- **Redis** → Caching layer
+
+---
+
+## 📦 Services
+
+### 1. Mutant Service
+Verifies DNA sequences and persists results. **[README →](dna-demo/README.md)**
+
+### 2. Stats Service
+Provides real-time verification statistics. **[README →](stats-service/README.md)**
+
+### 3. Frontend
+React web interface for testing the system. **[README →](dna-frontend/README.md)**
+
+---
+
+## 🧪 Testing
+
+**Run all tests:**
+```bash
+npm test
+```
+
+**Code Coverage:** JaCoCo reports generated in `target/site/jacoco/`
+
+---
+
+## Trade-offs
+
+- **Database**: Current is H2 for simplicity. Considered PostgreSQL for production.
+- **Service Communication**: Shared DB for simplicity vs REST API or message queue for decoupling.
+- **Caching**: Redis for performance vs added complexity.
+
+---
 
 ## Open Questions
-Would only “/stats/” receive high traffic, or both endpoints?
+
+- Do we expect the `/mutant/` endpoint to receive aggressive traffic as well?

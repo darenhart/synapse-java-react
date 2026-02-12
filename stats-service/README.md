@@ -1,75 +1,54 @@
 # Stats Service
 
-Microservice for retrieving real-time DNA verification statistics.
+**[← Back to Main Documentation](../README.md)**
+
+Statistics aggregation service for DNA verification data.
+
+---
 
 ## Overview
 
-This service provides a read-only API endpoint that returns aggregated statistics about DNA verifications performed by the Mutant Service. It reads from a shared database and caches results in Redis for optimal performance.
+Provides real-time statistics about DNA verifications:
+- Total mutant DNA count
+- Total human DNA count  
+- Mutant-to-total ratio
 
-## Features
+Uses Redis caching (60s TTL) to reduce database load.
 
-- **Ultra-fast stats** retrieval (single database read)
-- **Redis caching** with 1-minute TTL
-- **Real-time ratio** calculation
-- **Zero computation** overhead (pre-calculated counters)
+---
 
-## API Endpoint
+## Running the Service
+
+```bash
+cd stats-service
+./mvnw spring-boot:run
+```
+
+Service runs on **http://localhost:8081**
+
+---
+
+## API Endpoints
 
 ### GET /stats/
 
-Returns DNA verification statistics.
+Returns verification statistics.
 
-**Response:**
+**Response (200 OK):**
 ```json
 {
   "count_mutant_dna": 40,
   "count_human_dna": 100,
-  "ratio": 0.4
+  "ratio": 0.28571
 }
 ```
 
 **Example:**
 ```bash
 curl http://localhost:8081/stats/
-
-# With pretty print
-curl http://localhost:8081/stats/ | jq
 ```
 
-## Running the Service
-
-```bash
-# With Maven wrapper
-./mvnw spring-boot:run
-
-# Or build and run JAR
-./mvnw clean package
-java -jar target/stats-service-0.0.1-SNAPSHOT.jar
-```
-
-## Configuration
-
-Edit `src/main/resources/application.properties`:
-
-```properties
-# Service Port
-server.port=8081
-
-# Database (shared with mutant-service)
-spring.datasource.url=jdbc:h2:mem:dnadb
-
-# Redis Cache
-spring.data.redis.host=localhost
-spring.data.redis.port=6379
-spring.cache.redis.time-to-live=60000
-```
-
-## Architecture
-
-- **Port:** 8081
-- **Database:** Shared H2 (read-only access)
-- **Cache:** Redis (1-minute TTL)
-- **Dependencies:** None on Mutant Service (loose coupling)
+---
 
 ## Testing
 
@@ -77,16 +56,16 @@ spring.cache.redis.time-to-live=60000
 ./mvnw test
 ```
 
-## Performance
+---
 
-- **Without cache:** ~10ms (single DB query)
-- **With cache:** ~1ms (Redis read)
-- **Scalability:** Can handle millions of read requests/second with Redis cluster
+## Tech Stack
 
-## Technology
+- **Spring Boot 4.0.2**
+- **Spring Data JPA** (Database access)
+- **Spring Data Redis** (Caching)
+- **H2 Database** (Shared with Mutant Service)
+- **Java 17**
 
-- Spring Boot 4.0.2
-- Spring Data JPA
-- Spring Data Redis
-- Spring Cache
-- Lombok
+---
+
+**[← Back to Main Documentation](../README.md)** | **[Architecture](../ARCHITECTURE.md)**
