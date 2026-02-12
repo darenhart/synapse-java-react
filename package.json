@@ -1,0 +1,19 @@
+{
+  "name": "mutant",
+  "version": "1.0.0",
+  "description": "A scalable microservices-based system for detecting mutant DNA sequences and tracking verification statistics. Built to handle high traffic loads (100 to 1M requests/second).",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently --names \"MUTANT,STATS,FRONTEND\" --prefix-colors \"green,blue,magenta\" \"npm run start:mutant\" \"npm run start:stats\" \"npm run start:frontend\"",
+    "start:mutant": "cd dna-demo && ./mvnw spring-boot:run",
+    "start:stats": "cd stats-service && ./mvnw spring-boot:run",
+    "start:frontend": "cd dna-frontend && npm run dev",
+    "test": "echo \"Running tests...\" && cd dna-demo && ./mvnw test && cd ../stats-service && ./mvnw test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

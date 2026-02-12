@@ -5,23 +5,32 @@ A scalable microservices-based system for detecting mutant DNA sequences and tra
 ## 📐 Architecture Overview
 
 ```
-┌─────────────────┐         ┌──────────────┐         ┌──────────────┐
-│  Mutant Service │ ◄─────► │   Database   │ ◄─────► │ Stats Service│
-│   (Port 8080)   │         │     (H2)     │         │  (Port 8081) │
-└─────────────────┘         └──────────────┘         └──────────────┘
-         │                                                     │
-         └─────────────────────┬───────────────────────────────┘
+                        ┌──────────────┐
+                        │   Frontend   │
+                        │  (Port 5173) │
+                        └──────┬───────┘
                                │
-                        ┌──────▼──────┐
-                        │    Redis    │
-                        │   (Cache)   │
-                        └─────────────┘
+          ┌────────────────────┼────────────────────┐
+          │                    │                    │
+   ┌──────▼──────┐      ┌──────▼──────┐     ┌──────▼──────┐
+   │   Mutant    │◄────►│  Database   │◄───►│    Stats    │
+   │   Service   │      │     (H2)    │     │   Service   │
+   │ (Port 8080) │      └─────────────┘     │ (Port 8081) │
+   └──────┬──────┘                          └──────┬──────┘
+          │                                         │
+          └─────────────────┬───────────────────────┘
+                            │
+                     ┌──────▼──────┐
+                     │    Redis    │
+                     │   (Cache)   │
+                     └─────────────┘
 ```
 
 ### Services
 
 1. **Mutant Service** (`dna-demo/`) - Verifies DNA sequences and persists results
 2. **Stats Service** (`stats-service/`) - Provides real-time statistics
+3. **Frontend** (`dna-frontend/`) - React web interface for testing
 
 ## 🚀 Quick Start
 
@@ -29,6 +38,7 @@ A scalable microservices-based system for detecting mutant DNA sequences and tra
 
 - **Java 17** or higher
 - **Maven 3.6+** (or use included Maven wrapper)
+- **Node.js 18+** (for frontend)
 - **Redis** (optional for caching, recommended for production)
 
 ### Start Redis (Recommended)
@@ -40,7 +50,24 @@ docker run -d -p 6379:6379 redis:latest
 brew services start redis
 ```
 
-### Start Both Services
+### Option 1: Start All Services (Recommended)
+```bash
+# Install dependencies (first time only)
+npm install
+cd dna-frontend && npm install && cd ..
+
+# Start all services in one terminal
+npm start
+```
+
+This starts:
+- **Mutant Service** (Port 8080) - Green logs
+- **Stats Service** (Port 8081) - Blue logs
+- **Frontend** (Port 5173) - Magenta logs
+
+Press `Ctrl+C` to stop all services.
+
+### Option 2: Start Services Individually
 ```bash
 # Terminal 1: Mutant Service (Port 8080)
 cd dna-demo
@@ -49,7 +76,20 @@ cd dna-demo
 # Terminal 2: Stats Service (Port 8081)
 cd stats-service
 ./mvnw spring-boot:run
+
+# Terminal 3: Frontend (Port 5173)
+cd dna-frontend
+npm run dev
 ```
+
+## 🌐 Web Interface
+
+Open [http://localhost:5173](http://localhost:5173) in your browser to use the web interface:
+
+- Input DNA sequences (6x6 grid)
+- Generate random DNA for testing
+- View mutant detection results
+- See real-time statistics
 
 ## 📡 API Examples
 
@@ -93,7 +133,8 @@ cd stats-service
 
 See individual service README files:
 - [Mutant Service Documentation](dna-demo/README.md)
-- Stats Service Documentation (in stats-service/)
+- [Stats Service Documentation](stats-service/)
+- [Frontend Documentation](dna-frontend/README.md)
 
 ---
 
