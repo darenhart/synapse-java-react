@@ -34,9 +34,9 @@ This starts all three services with color-coded logs:
 
 ---
 
-## 🌐 Web Interface
+## Web Interface
 
-Open **[http://localhost:5173](http://localhost:5173)** to:
+Open **[http://localhost:5173](http://localhost:5173)**
 
 ---
 
@@ -114,6 +114,9 @@ npm test
 - [ ] Rename `dna-demo` to `mutant-service` for clarity
 - [ ] Implement stats display in frontend
 - [ ] Improve .claude skills for better test automation
+
+---
+
 
 ## Open Questions
 
