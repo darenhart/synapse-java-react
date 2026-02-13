@@ -202,6 +202,7 @@ tail -f /path/to/stats-service.log | grep "Received DNA verification event"
 
 ## ToDos
 
+- [ ] Use message queue (event-driven) architecture with Redis Pub/Sub to avoid StatsRepository
 - [ ] Rename `dna-demo` to `mutant-service` for clarity
 - [ ] Implement stats display in frontend
 - [ ] Switch from Redis Pub/Sub to Redis Streams (for event persistence)
@@ -209,8 +210,15 @@ tail -f /path/to/stats-service.log | grep "Received DNA verification event"
 - [ ] Add event schema versioning strategy
 - [ ] Add reconciliation job (detect/fix stats drift if events lost)
 
+---
+
+
 ## Open Questions
 
+<<<<<<< HEAD
 - Should we persist events (Redis Streams) for guaranteed delivery?
 - How to handle event schema evolution without breaking compatibility?
 - Need monitoring/alerting for event processing failures?
+=======
+- Do we expect the `/mutant/` endpoint to receive aggressive traffic as well?
+>>>>>>> c500477b62520f4dc26928bec22be87382483322
