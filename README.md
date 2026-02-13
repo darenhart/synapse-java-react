@@ -212,7 +212,7 @@ tail -f /path/to/stats-service.log | grep "Received DNA verification event"
 ## Trade-offs & Decisions
 Database: Current is H2 for simplicity. Considered PostgreSQL for production.
 
-Service Communication: Shared DB for simplicity vs REST API or message queue for decoupling.
+Service Communication: Shared DB for simplicity vs REST API or message queue for decoupling. Update: now using message queue
 
 Caching: Redis for performance vs added complexity.
 
@@ -220,6 +220,3 @@ Caching: Redis for performance vs added complexity.
 ## Open Questions
 
 - Do we expect the `/mutant/` endpoint to receive aggressive traffic as well?
-- Should we persist events (Redis Streams) for guaranteed delivery?
-- How to handle event schema evolution without breaking compatibility?
-- Need monitoring/alerting for event processing failures?
