@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./mvnw test:*)",
+      "Bash(./mvnw clean test:*)",
+      "Bash(xargs:*)",
+      "Bash(./mvnw clean package:*)",
+      "Bash(redis-cli ping:*)",
+      "Bash(docker run:*)",
+      "Bash(lsof:*)",
+      "Bash(docker exec:*)",
+      "Bash(curl:*)",
+      "Bash(__NEW_LINE_68dbcceaeddb1c12__ echo -e \"\\\\n\\\\nSubmitting mutant DNA...\")",
+      "Bash(__NEW_LINE_68dbcceaeddb1c12__ echo -e \"\\\\n\\\\nWaiting 2 seconds for event processing...\")",
+      "Bash(__NEW_LINE_68dbcceaeddb1c12__ echo -e \"\\\\nStats after mutant submission:\")",
+      "Bash(__NEW_LINE_9c6ce6acad27d602__ echo -e \"\\\\n\\\\nSubmitting NEW mutant DNA \\(different sequence\\)...\")",
+      "Bash(__NEW_LINE_9c6ce6acad27d602__ echo -e \"\\\\nWaiting 2 seconds for event processing...\")",
+      "Bash(__NEW_LINE_9c6ce6acad27d602__ echo -e \"\\\\nStats after new mutant submission:\")",
+      "Bash(pkill:*)",
+      "Bash(./mvnw package:*)",
+      "Bash(__NEW_LINE_86813983ee03d489__ echo -e \"\\\\n\\\\n=== Submitting NEW unique mutant DNA ===\")",
+      "Bash(__NEW_LINE_86813983ee03d489__ echo -e \"\\\\n=== Waiting 3 seconds for event processing ===\")",
+      "Bash(__NEW_LINE_86813983ee03d489__ echo -e \"\\\\n=== Stats after mutant submission ===\")",
+      "Bash(__NEW_LINE_332c559ed7e3436d__ echo -e \"\\\\n\\\\n=== Submitting NEW unique human DNA ===\")",
+      "Bash(__NEW_LINE_332c559ed7e3436d__ echo -e \"\\\\n=== Waiting 3 seconds for event processing ===\")",
+      "Bash(__NEW_LINE_332c559ed7e3436d__ echo -e \"\\\\n=== Final stats ===\")"
+    ]
+  }
+}

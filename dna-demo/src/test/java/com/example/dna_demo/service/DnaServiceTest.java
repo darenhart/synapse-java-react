@@ -1,8 +1,9 @@
 package com.example.dna_demo.service;
 
 import com.example.dna_demo.entity.DnaRecord;
+import com.example.dna_demo.event.DnaEventPublisher;
+import com.example.dna_demo.event.DnaVerifiedEvent;
 import com.example.dna_demo.repository.DnaRecordRepository;
-import com.example.dna_demo.repository.DnaStatsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,7 +26,7 @@ class DnaServiceTest {
     private DnaRecordRepository dnaRecordRepository;
 
     @Mock
-    private DnaStatsRepository dnaStatsRepository;
+    private DnaEventPublisher dnaEventPublisher;
 
     @InjectMocks
     private DnaService dnaService;
@@ -36,7 +37,7 @@ class DnaServiceTest {
     }
 
     @Test
-    void shouldSaveNewMutantDnaAndIncrementStats() {
+    void shouldSaveNewMutantDnaAndPublishEvent() {
         String[] dna = {"ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCCCTA", "TCACTG"};
 
         when(dnaRecordRepository.existsByDnaHash(anyString())).thenReturn(false);
@@ -47,12 +48,11 @@ class DnaServiceTest {
 
         assertTrue(result);
         verify(dnaRecordRepository).save(any(DnaRecord.class));
-        verify(dnaStatsRepository).incrementMutantCount();
-        verify(dnaStatsRepository, never()).incrementHumanCount();
+        verify(dnaEventPublisher).publish(any(DnaVerifiedEvent.class));
     }
 
     @Test
-    void shouldSaveNewHumanDnaAndIncrementStats() {
+    void shouldSaveNewHumanDnaAndPublishEvent() {
         String[] dna = {"ATGCGA", "CAGTGC", "TTATTT", "AGACGG", "GCGTCA", "TCACTG"};
 
         when(dnaRecordRepository.existsByDnaHash(anyString())).thenReturn(false);
@@ -63,8 +63,7 @@ class DnaServiceTest {
 
         assertFalse(result);
         verify(dnaRecordRepository).save(any(DnaRecord.class));
-        verify(dnaStatsRepository).incrementHumanCount();
-        verify(dnaStatsRepository, never()).incrementMutantCount();
+        verify(dnaEventPublisher).publish(any(DnaVerifiedEvent.class));
     }
 
     @Test
@@ -81,12 +80,11 @@ class DnaServiceTest {
         assertTrue(result);
         verify(mutantDetector, never()).isMutant(any());
         verify(dnaRecordRepository, never()).save(any());
-        verify(dnaStatsRepository, never()).incrementMutantCount();
-        verify(dnaStatsRepository, never()).incrementHumanCount();
+        verify(dnaEventPublisher, never()).publish(any());
     }
 
     @Test
-    void shouldNotIncrementStatsForDuplicateDna() {
+    void shouldNotPublishEventForDuplicateDna() {
         String[] dna = {"ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCCCTA", "TCACTG"};
         DnaRecord existingRecord = new DnaRecord();
         existingRecord.setIsMutant(true);
@@ -98,8 +96,7 @@ class DnaServiceTest {
         dnaService.verifyAndSave(dna);
         dnaService.verifyAndSave(dna);
 
-        verify(dnaStatsRepository, never()).incrementMutantCount();
-        verify(dnaStatsRepository, never()).incrementHumanCount();
+        verify(dnaEventPublisher, never()).publish(any());
     }
 
     @Test

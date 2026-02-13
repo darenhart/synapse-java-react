@@ -1,8 +1,9 @@
 package com.example.dna_demo.service;
 
 import com.example.dna_demo.entity.DnaRecord;
+import com.example.dna_demo.event.DnaEventPublisher;
+import com.example.dna_demo.event.DnaVerifiedEvent;
 import com.example.dna_demo.repository.DnaRecordRepository;
-import com.example.dna_demo.repository.DnaStatsRepository;
 import com.example.dna_demo.util.DnaHashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ public class DnaService {
 
     private final MutantDetector mutantDetector;
     private final DnaRecordRepository dnaRecordRepository;
-    private final DnaStatsRepository dnaStatsRepository;
+    private final DnaEventPublisher dnaEventPublisher;
 
     /**
      * Verifies if DNA is mutant and saves the result to database
@@ -49,14 +50,10 @@ public class DnaService {
         DnaRecord record = new DnaRecord(dnaHash, dnaSequence, isMutant);
         dnaRecordRepository.save(record);
 
-        // Atomically increment stats counter
-        if (isMutant) {
-            int updatedRows = dnaStatsRepository.incrementMutantCount();
-            log.info("Incremented mutant count - rows affected: {}", updatedRows);
-        } else {
-            int updatedRows = dnaStatsRepository.incrementHumanCount();
-            log.info("Incremented human count - rows affected: {}", updatedRows);
-        }
+        // Publish DNA verification event to Redis Pub/Sub
+        DnaVerifiedEvent event = new DnaVerifiedEvent(dnaHash, isMutant);
+        dnaEventPublisher.publish(event);
+        log.info("Published DNA verification event - Mutant: {}, Hash: {}", isMutant, dnaHash);
 
         return isMutant;
     }
