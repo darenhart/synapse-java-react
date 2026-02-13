@@ -111,6 +111,7 @@ npm test
 
 ## ToDos
 
+- [ ] Use message queue (event-driven) architecture with Redis Pub/Sub to avoid StatsRepository
 - [ ] Rename `dna-demo` to `mutant-service` for clarity
 - [ ] Implement stats display in frontend
 - [ ] Improve .claude skills for better test automation
